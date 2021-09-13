@@ -1,0 +1,50 @@
+version: "3.5"
+services:
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        container_name: backend
+        #working_dir: /usr/app
+        restart: unless-stopped
+        ports:
+          - "5000:5000"
+        networks:
+          - appBackFrontEnd
+        #volumes:
+          #- ./backend/src:/usr/app
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        container_name: frontend
+        working_dir: /app
+        restart: unless-stopped
+        ports:
+          - "8080:8081"
+        networks:
+          - appBackFrontEnd
+        volumes:
+          - ./frontend:/app
+    # container_mysql:
+    #     build:
+    #         context: ./bin/mysql
+    #         dockerfile: Dockerfile
+    #     container_name: container_mysql
+    #     networks:
+    #         - voyager
+    #     environment:
+    #         - MYSQL_ROOT_PASSWORD=password
+    #         - MYSQL_USER=chenrry
+    #         - MYSQL_PASSWORD=root
+    #     ports:
+    #         - "3309:3306"
+    #     volumes:
+    #         - ./mysql/db-data:/var/lib/mysql
+networks:
+    appBackFrontEnd:
+        driver: bridge
+
+
+
+
