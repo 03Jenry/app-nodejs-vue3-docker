@@ -13,38 +13,35 @@ services:
           - appBackFrontEnd
         #volumes:
           #- ./backend/src:/usr/app
-    frontend:
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile
-        container_name: frontend
-        working_dir: /app
-        restart: unless-stopped
-        ports:
-          - "8080:8081"
-        networks:
-          - appBackFrontEnd
-        volumes:
-          - ./frontend:/app
-    # container_mysql:
+    # frontend:
     #     build:
-    #         context: ./bin/mysql
+    #         context: ./frontend
     #         dockerfile: Dockerfile
-    #     container_name: container_mysql
-    #     networks:
-    #         - voyager
-    #     environment:
-    #         - MYSQL_ROOT_PASSWORD=password
-    #         - MYSQL_USER=chenrry
-    #         - MYSQL_PASSWORD=root
+    #     container_name: frontend
+    #     working_dir: /app
+    #     restart: unless-stopped
     #     ports:
-    #         - "3309:3306"
+    #       - "8080:8081"
+    #     networks:
+    #       - appBackFrontEnd
     #     volumes:
-    #         - ./mysql/db-data:/var/lib/mysql
+    #       - ./frontend:/app
+    container_mysql:
+        build:
+            context: ./mysql
+            dockerfile: Dockerfile
+        container_name: container_mysql
+        networks:
+            - appBackFrontEnd
+        environment:
+            - MYSQL_ROOT_PASSWORD=password
+            - MYSQL_USER=chenrry
+            - MYSQL_PASSWORD=root
+            - MYSQL_DATABASE=crudnodejs
+        ports:
+            - "3309:3306"
+        volumes:
+            - ./mysql/db-data:/var/lib/mysql
 networks:
-    appBackFrontEnd:
-        driver: bridge
-
-
-
-
+  appBackFrontEnd:
+    driver: bridge
